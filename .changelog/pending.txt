@@ -1,0 +1,35 @@
+```release-note:breaking-change
+tfsdk: The `Config`, `Plan`, and `State` type `Schema` field type has been updated from `tfsdk.Schema` to the generic `fwschema.Schema` interface to enable per-concept schema implementations
+```
+
+```release-note:note
+datasource: The `DataSource` type `GetSchema` method has been deprecated. Use the `Schema` method instead.
+```
+
+```release-note:note
+provider: The `Provider` type `GetSchema` method has been deprecated. Use the `Schema` method instead.
+```
+
+```release-note:note
+resource: The `Resource` type `GetSchema` method has been deprecated. Use the `Schema` method instead.
+```
+
+```release-note:note
+tfsdk: The `Attribute`, `Block`, and `Schema` types have been deprecated. Use the similarly named types in the `datasource/schema`, `provider/schema`, and `resource/schema` packages instead.
+```
+
+```release-note:note
+tfsdk: The `ListNestedAttributes`, `MapNestedAttributes`, `SetNestedAttributes`, and `SingleNestedAttributes` functions have been deprecated. Use the similarly named types in the `datasource/schema`, `provider/schema`, and `resource/schema` packages instead.
+```
+
+```release-note:feature
+datasource/schema: New package which contains schema interfaces and types relevant to data sources
+```
+
+```release-note:feature
+provider/schema: New package which contains schema interfaces and types relevant to providers
+```
+
+```release-note:feature
+resource/schema: New package which contains schema interfaces and types relevant to resources
+```

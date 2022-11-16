@@ -23,6 +23,11 @@ var _ fwschema.Block = Block{}
 //
 // The NestingMode field must be set or a runtime error will be raised by the
 // framework when fetching the schema.
+//
+// Deprecated: Use datasource/schema.Block, provider/schema.Block, or
+// resource/schema.Block instead. This can be switched by using the
+// datasource/schema.Schema, provider/schema.Schema, or resource/schema.Schema
+// types.
 type Block struct {
 	// Attributes are value fields inside the block. This map of attributes
 	// behaves exactly like the map of attributes on the Schema type.
@@ -215,7 +220,7 @@ func (b Block) Type() attr.Type {
 	}
 
 	for attrName, attr := range b.Attributes {
-		attrType.AttrTypes[attrName] = attr.FrameworkType()
+		attrType.AttrTypes[attrName] = attr.GetType()
 	}
 
 	for blockName, block := range b.Blocks {

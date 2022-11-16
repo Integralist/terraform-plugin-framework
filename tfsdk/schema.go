@@ -2,7 +2,6 @@ package tfsdk
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -19,11 +18,19 @@ var (
 	// on a path that doesn't have a schema associated with it, because
 	// it's an element, attribute, or block of a complex type, not a nested
 	// attribute.
-	ErrPathInsideAtomicAttribute = errors.New("path leads to element, attribute, or block of a schema.Attribute that has no schema associated with it")
+	//
+	// Deprecated: This error value was intended for internal usage and will
+	// be removed in a future version. If you have a use case for this,
+	// please create a GitHub issue.
+	ErrPathInsideAtomicAttribute = fwschema.ErrPathInsideAtomicAttribute
 
 	// ErrPathIsBlock is used with AttributeAtPath is called on a path is a
 	// block, not an attribute. Use blockAtPath on the path instead.
-	ErrPathIsBlock = errors.New("path leads to block, not an attribute")
+	//
+	// Deprecated: This error value was intended for internal usage and will
+	// be removed in a future version. If you have a use case for this,
+	// please create a GitHub issue.
+	ErrPathIsBlock = fwschema.ErrPathIsBlock
 )
 
 // Schema must satify the fwschema.Schema interface.
@@ -32,6 +39,11 @@ var _ fwschema.Schema = Schema{}
 // Schema is used to define the shape of practitioner-provider information,
 // like resources, data sources, and providers. Think of it as a type
 // definition, but for Terraform.
+//
+// Deprecated: Use datasource/schema.Schema, provider/schema.Schema, or
+// resource/schema.Schema instead. This can be switched by using the
+// datasource.DataSource, provider.Provider, or resource.Resource interface
+// Schema method.
 type Schema struct {
 	// Attributes are value fields inside the resource, provider, or data
 	// source that the schema is defining. The map key should be the name
@@ -145,7 +157,7 @@ func (s Schema) TypeAtTerraformPath(_ context.Context, path *tftypes.AttributePa
 	case fwschema.NestedBlock:
 		return typ.Block.Type(), nil
 	case Attribute:
-		return typ.FrameworkType(), nil
+		return typ.GetType(), nil
 	case Block:
 		return typ.Type(), nil
 	case Schema:
@@ -190,7 +202,7 @@ func (s Schema) Type() attr.Type {
 	attrTypes := map[string]attr.Type{}
 
 	for name, attr := range s.Attributes {
-		attrTypes[name] = attr.FrameworkType()
+		attrTypes[name] = attr.GetType()
 	}
 
 	for name, block := range s.Blocks {
